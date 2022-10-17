@@ -52,12 +52,16 @@ function App() {
   };
 
   const deleteNote = async (noteIdToRemove) => {
+    let prevNotesArr;
+    setNotes((prevNotes) => {
+      prevNotesArr = [...prevNotes];
+      return prevNotes.filter((noteItem) => noteItem._id !== noteIdToRemove);
+    });
+
     try {
       await deleteNoteFromDb(noteIdToRemove);
-      setNotes((prevNotes) =>
-        prevNotes.filter((noteItem) => noteItem._id !== noteIdToRemove)
-      );
     } catch (err) {
+      setNotes(prevNotesArr);
       errorAlert("Oops...", "Something went wrong.");
     }
   };
